@@ -1,10 +1,27 @@
-export default function Profile() {
-  const email = "usuario@ejemplo.com"
+import { useUser } from "../context/UserContext";
+import { useEffect, useState } from "react";
+
+const Profile = () => {
+  const { getProfile, logout } = useUser();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    getProfile().then(setUser).catch(console.error);
+  }, []);
+
   return (
-    <div style={{ padding: '2rem' }}>
+    <div className="container mt-5">
       <h2>Perfil de Usuario</h2>
-      <p>Email: {email}</p>
-      <button onClick={() => alert("Sesión cerrada (simulado)")}>Cerrar sesión</button>
+      {user ? (
+        <>
+          <p><strong>Email:</strong> {user.email}</p>
+          <button className="btn btn-danger" onClick={logout}>Cerrar sesión</button>
+        </>
+      ) : (
+        <p>Cargando...</p>
+      )}
     </div>
-  )
-}
+  );
+};
+
+export default Profile;
