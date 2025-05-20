@@ -1,17 +1,16 @@
-import Navbar from './navbar'
-import Footer from './Footer'
-import { Outlet } from 'react-router-dom'
+import Navbar from './Navbar';
+import { Outlet } from 'react-router-dom';
 
 const Layout = () => {
   return (
     <>
       <Navbar />
-      <main style={{ padding: '1rem', flexGrow: 1 }}>
+      <main className="container my-4">
         <Outlet />
       </main>
-      <Footer />
     </>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;
+

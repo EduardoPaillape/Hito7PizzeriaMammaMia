@@ -1,65 +1,33 @@
-import { useState } from "react";
-import { pizzaCart } from "../data/pizzas";
+import { useCart } from "../context/CartContext";
 import { formatPrice } from "../utils/format";
 
 const Cart = () => {
-  const [cart, setCart] = useState(pizzaCart);
-
-  const increaseQty = (id) => {
-    const updatedCart = cart.map((pizza) =>
-      pizza.id === id ? { ...pizza, quantity: pizza.quantity + 1 } : pizza
-    );
-    setCart(updatedCart);
-  };
-
-  const decreaseQty = (id) => {
-    const updatedCart = cart
-      .map((pizza) =>
-        pizza.id === id ? { ...pizza, quantity: pizza.quantity - 1 } : pizza
-      )
-      .filter((pizza) => pizza.quantity > 0);
-    setCart(updatedCart);
-  };
-
-  const total = cart.reduce((acc, pizza) => acc + pizza.price * pizza.quantity, 0);
+  const { cart, increment, decrement, total } = useCart();
 
   return (
     <div className="container my-5">
-      <h2 className="text-center mb-4">🛒 Carrito de Compras</h2>
-
+      <h2>🛒 Tu carrito</h2>
       {cart.length === 0 ? (
-        <p className="text-center text-muted">Tu carrito está vacío.</p>
+        <p>Tu carrito está vacío.</p>
       ) : (
         <>
-          <div className="row">
-            {cart.map((pizza) => (
-              <div className="col-md-6 mb-3" key={pizza.id}>
-                <div className="card d-flex flex-row align-items-center p-2">
-                  <img
-                    src={pizza.img}
-                    alt={pizza.name}
-                    style={{ width: "100px", height: "100px", objectFit: "cover" }}
-                    className="me-3"
-                  />
-                  <div className="flex-grow-1">
-                    <h5>{pizza.name}</h5>
-                    <p>Precio: ${formatPrice(pizza.price)}</p>
-                    <div className="d-flex align-items-center">
-                      <button className="btn btn-sm btn-danger me-2" onClick={() => decreaseQty(pizza.id)}>-</button>
-                      <span>{pizza.quantity}</span>
-                      <button className="btn btn-sm btn-success ms-2" onClick={() => increaseQty(pizza.id)}>+</button>
-                    </div>
-                  </div>
+          {cart.map((item) => (
+            <div key={item.id} className="d-flex align-items-center border-bottom py-3">
+              <img src={item.img} alt={item.name} width={100} className="me-3" />
+              <div className="flex-grow-1">
+                <h5 className="text-capitalize">{item.name}</h5>
+                <p>Precio unitario: ${formatPrice(item.price)}</p>
+                <div className="d-flex align-items-center">
+                  <button className="btn btn-sm btn-outline-secondary me-2" onClick={() => decrement(item.id)}>-</button>
+                  <span>{item.count}</span>
+                  <button className="btn btn-sm btn-outline-secondary ms-2" onClick={() => increment(item.id)}>+</button>
                 </div>
               </div>
-            ))}
-          </div>
-
+              <strong className="ms-auto">${formatPrice(item.price * item.count)}</strong>
+            </div>
+          ))}
           <hr />
-          <h4 className="text-end">Total: ${formatPrice(total)}</h4>
-          <div className="text-end">
-            <button className="btn btn-primary mt-2">Pagar</button>
-          </div>
+          <h4>Total: ${formatPrice(total)}</h4>
         </>
       )}
     </div>

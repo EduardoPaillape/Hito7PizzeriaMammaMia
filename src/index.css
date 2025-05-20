@@ -26,11 +26,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  display: flex;
-  flex-direction: column;
+
 }
 
 h1 {
